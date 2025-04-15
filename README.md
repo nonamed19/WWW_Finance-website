@@ -83,7 +83,6 @@ $ npm run dev
 | <img src="./readimg/main_page.jpg" height="200px" title="main_page"/> | <img src="./readimg/bankings_list.jpg" height="200px" title="bankings_list"/> | <img src="./readimg/bankingsdetail.png" height="200px" title="bankings_detail"/> | <img src="./readimg/bankings_recommend.jpg" height="200px" title="bankings_recommend"/> |
 | 금융상품 비교 | 근처 은행 찾기 | 환율 정보 | 경제 뉴스 |
 | <img src="./readimg/bankings_comparison.jpg" height="200px" title="bankings_comparison"/> | <img src="./readimg/bank_locations.jpg" height="200px" title="bank_locations"/> | <img src="./readimg/currencies.jpg" height="200px" title="currencies"/> | <img src="./readimg/bankings_news.jpg" height="200px" title="bankings_news"/> |
-|  |  |  |  | 
 
 ## 주요 기능
 
