@@ -4,7 +4,7 @@
   <img src="./readimg/logoimage.png" width="300" alt="World Wide Wealth Logo"/>
 </p>
 
-SSAFY 관통 프로젝트 - 금융 상품 추천 플랫폼<br>
+SSAFY 관통프로젝트 : 사용자 맞춤형 금융 상품 추천 웹 개발<br>
 개발 기간 : 2024/11/18 ~ 2024/11/26 (약 2주)
 
 ## 프로젝트 소개
