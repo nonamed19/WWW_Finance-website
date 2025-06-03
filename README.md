@@ -17,7 +17,7 @@ World Wide Wealth는 사용자 맞춤형 금융 상품 추천 시스템으로, �
 
 개발 버전: `배포 X`<br>
 Frontend 서버: `배포 X`<br>
-Backend 서버: `배포 X`<br>
+Backend 서버: `http://127.0.0.1:8000`<br>
 
 ### 팀 소개
 
@@ -89,6 +89,12 @@ $ npm run dev
 - GitHub
 - GitLab
 - Notion
+
+### 외부 API
+
+- 금융감독원 API
+- 한국수출입은행 API
+- OPENAI ChatGPT
 
 ## 화면 구성
 
