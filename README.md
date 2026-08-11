@@ -54,7 +54,7 @@ $ python -m venv .venv
 $ .venv\Scripts\activate
 $ pip install -r requirements.txt
 $ copy .env.example .env
-$ uvicorn app.main:app --reload
+$ python run.py
 ```
 
 #### Frontend
