@@ -7,6 +7,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 # Example: mysql+pymysql://www_user:password@127.0.0.1:3306/www_financial?charset=utf8mb4
 DATABASE_URL = os.getenv("DATABASE_URL", "")
+DB_POOL_SIZE = int(os.getenv("DB_POOL_SIZE", "5"))
+DB_MAX_OVERFLOW = int(os.getenv("DB_MAX_OVERFLOW", "10"))
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_ROOT.mkdir(exist_ok=True)
 

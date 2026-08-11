@@ -1,11 +1,11 @@
+# Python 3.10+ / MySQL backend.  Only direct runtime dependencies are pinned.
 fastapi==0.115.6
 uvicorn[standard]==0.34.0
-sqlalchemy==2.0.51
-PyMySQL==1.1.1
-python-multipart==0.0.20
+SQLAlchemy==2.0.51
+PyMySQL[rsa]==1.1.1
 python-dotenv==1.0.1
+python-multipart==0.0.20
 requests==2.32.3
 xmltodict==0.14.2
 yfinance==0.2.50
 openai==1.55.0
-resend==2.4.0

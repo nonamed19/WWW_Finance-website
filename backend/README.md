@@ -1,8 +1,8 @@
 # FastAPI backend
 
-This directory is served by FastAPI. It retains the public routes used by the
-Vue frontend, including the Django REST-compatible `Token <key>` authorization
-header, so no frontend API rewiring is required.
+This directory is served by FastAPI. Feature routers live as Python modules in
+`app/` (for example, `accounts.py` and `bankings.py`). The public routes and
+`Token <key>` authorization header used by the Vue frontend remain unchanged.
 
 ## Run locally
 

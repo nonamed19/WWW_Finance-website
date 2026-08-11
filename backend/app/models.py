@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, Numeric, String, Table, Text, Column
+from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Index, Integer, Numeric, String, Table, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
@@ -59,11 +59,19 @@ class ProductBase:
 
 class DepositBase(ProductBase, Base):
     __tablename__ = "bankings_depositbaselist"
+    __table_args__ = (
+        Index("ix_deposit_product_lookup", "fin_co_no", "fin_prdt_cd"),
+        Index("ix_deposit_bank_name", "kor_co_nm"),
+    )
     options: Mapped[list["DepositOption"]] = relationship(back_populates="product", cascade="all, delete-orphan")
 
 
 class SavingBase(ProductBase, Base):
     __tablename__ = "bankings_savingbaselist"
+    __table_args__ = (
+        Index("ix_saving_product_lookup", "fin_co_no", "fin_prdt_cd"),
+        Index("ix_saving_bank_name", "kor_co_nm"),
+    )
     options: Mapped[list["SavingOption"]] = relationship(back_populates="product", cascade="all, delete-orphan")
 
 
@@ -79,12 +87,14 @@ class ProductOption:
 
 class DepositOption(ProductOption, Base):
     __tablename__ = "bankings_depositoptionlist"
+    __table_args__ = (Index("ix_deposit_option_product_term", "product_id", "save_trm"),)
     product_id: Mapped[int] = mapped_column("product_id", ForeignKey("bankings_depositbaselist.id", ondelete="CASCADE"))
     product: Mapped[DepositBase] = relationship(back_populates="options")
 
 
 class SavingOption(ProductOption, Base):
     __tablename__ = "bankings_savingoptionlist"
+    __table_args__ = (Index("ix_saving_option_product_term", "product_id", "save_trm"),)
     product_id: Mapped[int] = mapped_column("product_id", ForeignKey("bankings_savingbaselist.id", ondelete="CASCADE"))
     product: Mapped[SavingBase] = relationship(back_populates="options")
 
@@ -98,6 +108,10 @@ review_likes = Table("bankings_productreview_likes", Base.metadata,
 
 class ProductReview(Base):
     __tablename__ = "bankings_productreview"
+    __table_args__ = (
+        Index("ix_product_review_created_at", "created_at"),
+        Index("ix_product_review_user_id", "user_id"),
+    )
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("accounts_user.id", ondelete="CASCADE"))
     product_type: Mapped[str] = mapped_column(String(10))
@@ -135,6 +149,7 @@ class Exchange(Base):
 
 class Stock(Base):
     __tablename__ = "stocks_stocklist"
+    __table_args__ = (Index("ix_stock_date_name", "bas_dt", "idx_nm"),)
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     bas_dt: Mapped[str] = mapped_column(String(10)); idx_nm: Mapped[str] = mapped_column(String(100)); idx_csf: Mapped[str | None] = mapped_column(String(100), nullable=True)
     epy_itms_cnt: Mapped[int] = mapped_column(Integer, default=0); clpr: Mapped[float] = mapped_column(Float, default=0); vs: Mapped[float] = mapped_column(Float, default=0); flt_rt: Mapped[float] = mapped_column(Float, default=0); mkp: Mapped[float] = mapped_column(Float, default=0); hipr: Mapped[float] = mapped_column(Float, default=0); lopr: Mapped[float] = mapped_column(Float, default=0)
@@ -149,22 +164,30 @@ class News(Base):
 
 class UserSurvey(Base):
     __tablename__ = "surveys_usersurvey"
+    __table_args__ = (Index("ix_survey_user_created_at", "user_id", "created_at"),)
     id: Mapped[int] = mapped_column(Integer, primary_key=True); user_id: Mapped[int] = mapped_column(ForeignKey("accounts_user.id", ondelete="CASCADE"))
     age_group: Mapped[str] = mapped_column(String(20)); income_source: Mapped[str] = mapped_column(String(20)); asset_size: Mapped[str] = mapped_column(String(20)); financial_purpose: Mapped[str] = mapped_column(String(20)); important_factor: Mapped[str] = mapped_column(String(20)); expected_return: Mapped[str] = mapped_column(String(20), default=""); investment_period: Mapped[str] = mapped_column(String(20), default=""); financial_products: Mapped[str] = mapped_column(String(100)); preferred_bank: Mapped[str] = mapped_column(String(20)); banking_channel: Mapped[str] = mapped_column(String(20), default=""); recent_investment: Mapped[bool | None] = mapped_column(Boolean, nullable=True); risk_tolerance: Mapped[str] = mapped_column(String(20), default=""); preferred_product: Mapped[str] = mapped_column(String(20), default=""); preferred_method: Mapped[str] = mapped_column(String(20), default=""); monthly_investment: Mapped[str] = mapped_column(String(20), default=""); preferred_benefit: Mapped[str] = mapped_column(String(20), default=""); service_priority: Mapped[str] = mapped_column(String(20), default=""); created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
 class Subscription(Base):
     __tablename__ = "subscriptions_subscribedproduct"
+    __table_args__ = (Index("ix_subscription_user_product", "user_id", "product_id"),)
     id: Mapped[int] = mapped_column(Integer, primary_key=True); user_id: Mapped[int] = mapped_column(ForeignKey("accounts_user.id", ondelete="CASCADE")); product_id: Mapped[str] = mapped_column(String(255)); product_name: Mapped[str] = mapped_column(String(255)); subscribed_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
 class Conversation(Base):
     __tablename__ = "chats_conversation"
+    __table_args__ = (Index("ix_conversation_user_created", "user_id", "created_at"),)
     id: Mapped[int] = mapped_column(Integer, primary_key=True); user_id: Mapped[int] = mapped_column(ForeignKey("accounts_user.id", ondelete="CASCADE")); created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow); updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    messages: Mapped[list["Message"]] = relationship(back_populates="conversation", cascade="all, delete-orphan")
+    messages: Mapped[list["Message"]] = relationship(
+        back_populates="conversation",
+        cascade="all, delete-orphan",
+        order_by="Message.created_at",
+    )
 
 
 class Message(Base):
     __tablename__ = "chats_message"
+    __table_args__ = (Index("ix_message_conversation_created", "conversation_id", "created_at"),)
     id: Mapped[int] = mapped_column(Integer, primary_key=True); conversation_id: Mapped[int] = mapped_column(ForeignKey("chats_conversation.id", ondelete="CASCADE")); role: Mapped[str] = mapped_column(String(10)); content: Mapped[str] = mapped_column(Text); created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     conversation: Mapped[Conversation] = relationship(back_populates="messages")
