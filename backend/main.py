@@ -1,17 +1,19 @@
 """FastAPI application entry point."""
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy.exc import OperationalError
 
 from app import config
 from app.accounts import router as accounts_router
 from app.bankings import router as bankings_router
 from app.chats import router as chats_router
 from app.currencies import router as currencies_router
-from app.database import Base, engine
+from app.database import database_is_available, engine, initialize_database
 from app.economics import router as economics_router
 from app.markets import router as markets_router
 from app.recommendations import router as recommendations_router
@@ -20,16 +22,24 @@ from app.subscriptions import router as subscriptions_router
 from app.surveys import router as surveys_router
 
 
+logger = logging.getLogger(__name__)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Initialize database schema before serving requests."""
-    Base.metadata.create_all(bind=engine)
-    # `create_all` does not add indexes to tables created by an older version of
-    # the application.  Create the declared indexes idempotently on startup.
-    for table in Base.metadata.tables.values():
-        for index in table.indexes:
-            index.create(bind=engine, checkfirst=True)
-    yield
+    """Prepare the database without making it a server startup requirement."""
+    try:
+        initialize_database()
+    except OperationalError as error:
+        # The API (docs, health check, and DB-independent routes) should remain
+        # available while MySQL is stopped. DB-backed routes return 503 through
+        # the get_db dependency and recover automatically when MySQL returns.
+        logger.warning("MySQL is unavailable; starting without it: %s", error)
+
+    try:
+        yield
+    finally:
+        engine.dispose()
 
 
 app = FastAPI(
@@ -69,4 +79,7 @@ def root() -> RedirectResponse:
 
 @app.get("/health/", tags=["health"])
 def health():
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "database": "available" if database_is_available() else "unavailable",
+    }

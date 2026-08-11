@@ -57,6 +57,11 @@ $ copy .env.example .env
 $ python run.py
 ```
 
+MySQL이 중지된 상태에서도 백엔드는 실행되며, 이때 DB를 사용하는 API는
+`503 Service Unavailable`을 반환합니다. MySQL이 다시 실행되면 백엔드를
+재시작하지 않아도 이후 요청부터 자동으로 연결됩니다. `/health/`에서 현재
+데이터베이스 연결 상태를 확인할 수 있습니다.
+
 #### Frontend
 
 ```bash
