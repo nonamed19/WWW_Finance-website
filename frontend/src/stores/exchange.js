@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:8000"; // Django API URL
+const API_URL = "http://127.0.0.1:8000"; // FastAPI URL
 
 // 환율 데이터 가져오기
 export const getExchangeData = function () {

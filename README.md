@@ -24,7 +24,7 @@ Backend 서버: `http://127.0.0.1:8000`<br>
 | 이름   | 역할         | GitHub 링크                                | 비고                        |
 | ------ | ------------ | ------------------------------------------ | --------------------------- |
 | 박진수 | 팀장, 백엔드 |                                            | Vue.js 기반 프론트엔드 개발 |
-| 김찬호 | 팀원, 프론트 | [@nonamed19](https://github.com/nonamed19) | Django 기반 백엔드 개발     |
+| 김찬호 | 팀원, 프론트 | [@nonamed19](https://github.com/nonamed19) | FastAPI 기반 백엔드 개발     |
 
 ## 시작 가이드
 
@@ -33,8 +33,8 @@ Backend 서버: `http://127.0.0.1:8000`<br>
 For building and running the application you need:
 
 ```
-- Python 3.9.13
-- Django 4.2.16
+- Python 3.10+
+- FastAPI + SQLAlchemy
 - Node.js LTS (16+)
 - Vue 3
 ```
@@ -49,18 +49,18 @@ $ cd world-wide-wealth
 #### Backend
 
 ```bash
-$ cd final-pjt-back
-$ python -m venv venv
-$ source venv\Scripts\activate
+$ cd backend
+$ python -m venv .venv
+$ .venv\Scripts\activate
 $ pip install -r requirements.txt
-$ python manage.py migrate
-$ python manage.py runserver
+$ copy .env.example .env
+$ uvicorn app.main:app --reload
 ```
 
 #### Frontend
 
 ```bash
-$ cd ../final-pjt-front
+$ cd ../frontend
 $ npm install
 $ npm run dev
 ```
@@ -80,7 +80,7 @@ $ npm run dev
 
 ### Development
 
-- Backend: Django + Django REST Framework
+- Backend: FastAPI + SQLAlchemy
 - Frontend: Vue 3 + Composition API + Pinia
 - ML(AI): RandomForestClassifier
 
@@ -144,4 +144,4 @@ $ npm run dev
 **박진수** : 머신러닝 분류 작업에서 기준치에 대한 명확한 이해가 부족했다 사료돼, 예측의 정확도가 아쉬웠다. 객체를 학습하는 과정을 발전시키고싶은 욕심이 생겼다.
 백엔드의 필드들을 미리 정리하고 필요한 부분을 표시해가며 개발해야하는 필요성을 뼈저리게 느꼈다. 또한 디자인과 배치를 좀 더 미리 설정하고 구현할 수 있도록 피그마나 프론트엔드 측면에서 다른 배움의 과정의 진행할 예정이다.
 
-**김찬호** : Python 및 Django를 활용하여 Back 개발을 수행하며 django app 및 각 models의 관리가 철저하게 관리 되어야 함을 학습하였으며, 초기 기획 단계에서 얼마나 프로젝트를 구체적으로 계획하느냐에 따라 향후 개발 프로젝트 수행 중에 마주할 문제점들을 최소화할 수 있다는 것을 경험하였습니다. 뿐만 아니라, 개발 프로젝트 진행 시에는 back과 front로 업무를 분할하여 코드 작성을 진행하지만, 개발 프로세스를 고려하면 분업보다 협동의 마음가짐으로 협력이 중요하다는 것을 학습하였습니다.
+**김찬호** : Python 기반 백엔드를 FastAPI와 SQLAlchemy 구조로 전환했습니다. API 계약과 데이터 모델을 명확히 관리하고, 초기 기획과 팀 간 협업을 통해 개발 과정의 불확실성을 줄이는 일이 중요하다는 점을 배웠습니다.

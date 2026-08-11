@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 
-// Django API URL
+// FastAPI URL
 const API_URL = "http://127.0.0.1:8000";
 
 // Axios 인스턴스 생성
