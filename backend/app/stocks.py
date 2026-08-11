@@ -32,7 +32,7 @@ def stock_fetch_data(db: Session = Depends(get_db)):
     }
     existing = (
         db.query(Stock)
-        .filter(tuple_(Stock.bas_dt, Stock.idx_nm).in_(stock_keys))
+        .filter(tuple_(Stock.bas_dt, Stock.idx_nm).in_(list(stock_keys)))
         .all()
         if stock_keys else []
     )

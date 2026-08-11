@@ -39,9 +39,16 @@ def news_fetch_data(
         params={"query": query, "display": display, "start": start, "sort": sort},
     )
     items = payload.get("items", [])
+    titles = [clean_text(source.get("title", "")) for source in items]
+    existing = (
+        db.query(News).filter(News.title.in_(titles)).all() if titles else []
+    )
+    news_by_title = {item.title: item for item in existing}
     for source in items:
-        title = clean_text(source["title"])
-        item = db.query(News).filter_by(title=title).first()
+        title = clean_text(source.get("title", ""))
+        if not title:
+            continue
+        item = news_by_title.get(title)
         values = {
             "originallink": source["originallink"],
             "link": source["link"],

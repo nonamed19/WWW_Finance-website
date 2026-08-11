@@ -38,7 +38,7 @@ def fetch_product_data(
     }
     existing_products = (
         db.query(product_model)
-        .filter(tuple_(product_model.fin_co_no, product_model.fin_prdt_cd).in_(product_keys))
+        .filter(tuple_(product_model.fin_co_no, product_model.fin_prdt_cd).in_(list(product_keys)))
         .all()
         if product_keys else []
     )

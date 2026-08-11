@@ -20,8 +20,17 @@ def exchange_fetch_data(db: Session = Depends(get_db)):
         "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON",
         params={"authkey": config.CURRENCIES_KEY, "data": "AP01"},
     )
+    currency_units = [source.get("cur_unit") for source in sources if source.get("cur_unit")]
+    existing = (
+        db.query(Exchange).filter(Exchange.cur_unit.in_(currency_units)).all()
+        if currency_units else []
+    )
+    exchanges = {item.cur_unit: item for item in existing}
     for source in sources:
-        item = db.query(Exchange).filter_by(cur_unit=source.get("cur_unit", "")).first()
+        currency_unit = source.get("cur_unit")
+        if not currency_unit:
+            continue
+        item = exchanges.get(currency_unit)
         values = {
             key: source.get(key, "")
             for key in (
@@ -33,7 +42,7 @@ def exchange_fetch_data(db: Session = Depends(get_db)):
             for key, value in values.items():
                 setattr(item, key, value)
         else:
-            db.add(Exchange(cur_unit=source.get("cur_unit", ""), **values))
+            db.add(Exchange(cur_unit=currency_unit, **values))
     db.commit()
     return {"message": "Exchange rates fetched and stored successfully."}
 
@@ -54,8 +63,12 @@ async def exchange_calculate(request: Request, db: Session = Depends(get_db)):
     target = data.get("to_currency")
     if not amount or not source or not target:
         raise HTTPException(400, {"error": "Required parameters missing"})
-    from_item = db.query(Exchange).filter_by(cur_unit=source).first()
-    to_item = db.query(Exchange).filter_by(cur_unit=target).first()
+    exchanges = {
+        item.cur_unit: item
+        for item in db.query(Exchange).filter(Exchange.cur_unit.in_((source, target))).all()
+    }
+    from_item = exchanges.get(source)
+    to_item = exchanges.get(target)
     if not from_item or not to_item:
         raise HTTPException(400, {"error": "Invalid currency"})
     try:
