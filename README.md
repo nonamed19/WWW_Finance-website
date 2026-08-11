@@ -36,7 +36,7 @@ For building and running the application you need:
 - Python 3.10+
 - FastAPI + SQLAlchemy
 - Node.js LTS (16+)
-- Vue 3
+- React 18 + Vite
 ```
 
 ### Installation
@@ -81,7 +81,7 @@ $ npm run dev
 ### Development
 
 - Backend: FastAPI + SQLAlchemy
-- Frontend: Vue 3 + Composition API + Pinia
+- Frontend: React 18 + React Router + Vite
 - ML(AI): RandomForestClassifier
 
 ### Communication

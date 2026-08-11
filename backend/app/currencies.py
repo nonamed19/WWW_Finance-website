@@ -49,7 +49,12 @@ def exchange_fetch_data(db: Session = Depends(get_db)):
 
 @router.get("/exchange-get-data/")
 def exchange_get_data(db: Session = Depends(get_db)):
-    return [model_data(item) for item in db.query(Exchange).all()]
+    rows = [model_data(item) for item in db.query(Exchange).order_by(Exchange.cur_unit).all()]
+    # The source API commonly omits KRW because it is its base currency, while
+    # the client needs it as a valid conversion target.
+    if not any(row["cur_unit"] == "KRW" for row in rows):
+        rows.insert(0, {"cur_unit": "KRW", "cur_nm": "한국 원", "deal_bas_r": "1", "bkpr": "1"})
+    return rows
 
 
 @router.post("/exchange-calculate/")
@@ -61,21 +66,23 @@ async def exchange_calculate(request: Request, db: Session = Depends(get_db)):
         raise HTTPException(400, {"error": "Invalid amount"}) from error
     source = data.get("from_currency")
     target = data.get("to_currency")
-    if not amount or not source or not target:
+    if amount <= 0 or not source or not target:
         raise HTTPException(400, {"error": "Required parameters missing"})
     exchanges = {
         item.cur_unit: item
         for item in db.query(Exchange).filter(Exchange.cur_unit.in_((source, target))).all()
     }
-    from_item = exchanges.get(source)
-    to_item = exchanges.get(target)
-    if not from_item or not to_item:
+    rates = {item.cur_unit: item.deal_bas_r for item in exchanges.values()}
+    rates["KRW"] = "1"
+    from_rate = rates.get(source)
+    to_rate = rates.get(target)
+    if not from_rate or not to_rate:
         raise HTTPException(400, {"error": "Invalid currency"})
     try:
         converted = (
             amount
-            * float(from_item.deal_bas_r.replace(",", ""))
-            / float(to_item.deal_bas_r.replace(",", ""))
+            * float(from_rate.replace(",", ""))
+            / float(to_rate.replace(",", ""))
         )
     except ValueError as error:
         raise HTTPException(400, {"error": "Invalid currency rate"}) from error

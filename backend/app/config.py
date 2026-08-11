@@ -19,3 +19,13 @@ NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID", "")
 NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET", "")
 CHATS_KEY = os.getenv("CHATS_KEY", "")
 RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
+
+# Comma-separated origins make local and deployed frontend addresses explicit
+# without widening credentialed CORS requests to every origin.
+CORS_ORIGINS = tuple(
+    origin.strip()
+    for origin in os.getenv(
+        "CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
+    ).split(",")
+    if origin.strip()
+)
