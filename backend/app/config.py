@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 # Example: mysql+pymysql://www_user:password@127.0.0.1:3306/www_financial?charset=utf8mb4
-DATABASE_URL = os.getenv("DATABASE_URL", "")
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
 DB_POOL_SIZE = int(os.getenv("DB_POOL_SIZE", "5"))
 DB_MAX_OVERFLOW = int(os.getenv("DB_MAX_OVERFLOW", "10"))
 DB_CONNECT_TIMEOUT = int(os.getenv("DB_CONNECT_TIMEOUT", "3"))

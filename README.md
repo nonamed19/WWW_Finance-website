@@ -118,7 +118,7 @@ pip install -r requirements.txt
 `.env` 파일을 `backend/` 경로에 생성합니다. 실제 값은 절대 커밋하지 마세요.
 
 ```dotenv
-# 데이터베이스 (mysql+pymysql 스킴 필수)
+# 데이터베이스 (선택: 미설정 시 DB 기능 비활성화)
 DATABASE_URL=mysql+pymysql://[DB_USER]:[DB_PASSWORD]@127.0.0.1:3306/[DB_NAME]?charset=utf8mb4
 DB_POOL_SIZE=5
 DB_MAX_OVERFLOW=10
@@ -144,7 +144,7 @@ python run.py
 # http://127.0.0.1:8000 에서 기동, /docs 로 리다이렉트
 ```
 
-> `DATABASE_URL`이 비어 있거나 `mysql+pymysql://` 스킴이 아니면 기동 시 예외가 발생합니다. 스키마와 인덱스는 서버 기동 시점에 자동 생성됩니다(`initialize_database`).
+> `DATABASE_URL`을 비워 두거나 MySQL에 연결할 수 없어도 백엔드와 프런트엔드는 실행됩니다. 이 경우 DB 의존 API는 `503 Service Unavailable`을 반환하고, `/health/`의 `database` 값은 `unavailable`입니다. MySQL이 연결되면 스키마와 인덱스가 서버 기동 시점에 자동 생성됩니다(`initialize_database`).
 
 ### 2. 프런트엔드 설정
 
@@ -198,7 +198,7 @@ curl -X POST http://127.0.0.1:8000/currencies/exchange-calculate/ \
 
 | 변수 | 기본값 | 설명 |
 | --- | --- | --- |
-| `DATABASE_URL` | (없음, 필수) | `mysql+pymysql://` 스킴만 허용 |
+| `DATABASE_URL` | (없음) | `mysql+pymysql://` 형식의 MySQL URL. 없거나 연결 실패 시 DB 기능 비활성화 |
 | `DB_POOL_SIZE` | `5` | 커넥션 풀 크기 |
 | `DB_MAX_OVERFLOW` | `10` | 풀 초과 허용 커넥션 수 |
 | `DB_CONNECT_TIMEOUT` | `3` | 연결 타임아웃(초) |

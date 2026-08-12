@@ -13,7 +13,7 @@ from app.accounts import router as accounts_router
 from app.bankings import router as bankings_router
 from app.chats import router as chats_router
 from app.currencies import router as currencies_router
-from app.database import database_is_available, engine, initialize_database
+from app.database import database_is_available, dispose_database, initialize_database
 from app.economics import router as economics_router
 from app.markets import router as markets_router
 from app.recommendations import router as recommendations_router
@@ -31,15 +31,14 @@ async def lifespan(app: FastAPI):
     try:
         initialize_database()
     except OperationalError as error:
-        # The API (docs, health check, and DB-independent routes) should remain
-        # available while MySQL is stopped. DB-backed routes return 503 through
-        # the get_db dependency and recover automatically when MySQL returns.
+        # The API remains available while MySQL is stopped. DB-backed routes
+        # return 503 through the get_db dependency.
         logger.warning("MySQL is unavailable; starting without it: %s", error)
 
     try:
         yield
     finally:
-        engine.dispose()
+        dispose_database()
 
 
 app = FastAPI(
