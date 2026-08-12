@@ -25,6 +25,7 @@ select {
 button {
   cursor: pointer;
 }
+button:hover:not(:disabled), .primary:hover, .outline:hover, .light-btn:hover { transform: translateY(-1px); }
 a {
   text-decoration: none;
   color: inherit;
@@ -106,6 +107,7 @@ a {
   border-color: var(--blue);
   color: var(--navy);
 }
+.nav-wrap nav a:last-child { color: #875d22; }
 .chat-trigger,
 .outline,
 .primary,
@@ -253,6 +255,7 @@ em {
   box-shadow: 0 8px 24px #142e500c;
   padding: 28px 30px;
 }
+.card { box-shadow: 0 14px 40px #142e5010; }
 .section-title {
   display: flex;
   justify-content: space-between;
@@ -432,6 +435,16 @@ em {
   border: 1px solid var(--line);
   border-radius: 10px;
 }
+.product:hover { border-color: #b9cce8; box-shadow: 0 10px 22px #17365b0b; }
+.product-toolbar, .market-page-head, .community-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.product-toolbar .tabs { margin: 0; flex: 0 0 auto; }
+.product-toolbar .search { max-width: 360px; }
+.product-rate { display: flex; align-items: center; gap: 16px; }
+.product-rate span { color: var(--blue); font-size: 13px; font-weight: 700; white-space: nowrap; }
+.modal-bank { color: var(--blue); font-size: 13px; font-weight: 700; }
+.option-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 18px; }
+.option-list span { display: flex; justify-content: space-between; padding: 9px; border-radius: 7px; background: #f3f7fc; font-size: 12px; }
+.option-list b { color: var(--blue); }
 .product h3 {
   margin: 5px 0;
   font-size: 16px;
@@ -556,6 +569,8 @@ select {
   background: #f3f7fc;
   color: var(--navy);
 }
+.subhead { display: flex; align-items: center; gap: 10px; margin: 32px 0 14px; color: var(--navy); font-size: 19px; }
+.market-page-head .page-head { margin-bottom: 0; }
 .recommend-products {
   margin-top: 26px;
 }
@@ -566,6 +581,25 @@ select {
   padding: 18px 0;
   border-bottom: 1px solid var(--line);
 }
+.review { padding: 22px 0; }
+.review-heading { display: flex; justify-content: space-between; gap: 16px; }
+.review-heading h3 { margin-top: 5px; }
+.review-heading small { color: var(--blue); font-size: 12px; }
+.review-heading > span { color: var(--muted); font-size: 12px; }
+.review-actions { display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+.review-actions button { border: 0; background: transparent; color: var(--muted); padding: 0; font-size: 12px; }
+.review-actions .liked { color: #d65358; }
+.comment-list { margin-top: 16px; border-radius: 8px; background: #f6f8fb; padding: 12px; }
+.comment-list p { margin: 5px 0; font-size: 12px; }
+.comment-list p b { margin-right: 7px; color: var(--navy); }
+.comment-list form { display: flex; gap: 7px; margin-top: 10px; }
+.comment-list input { padding: 8px; font-size: 12px; }
+.comment-list button { border: 0; border-radius: 6px; background: var(--navy); color: #fff; padding: 7px 10px; white-space: nowrap; font-size: 12px; }
+.review-form { display: grid; gap: 10px; margin: 0 0 24px; padding: 18px; border: 1px solid #cbd9eb; border-radius: 10px; background: #f7faff; }
+.review-form > div { display: flex; gap: 9px; justify-content: flex-end; }
+.review-form > div:first-child { justify-content: stretch; }
+.review-form select { min-width: 110px; }
+.review-form textarea { min-height: 95px; resize: vertical; border: 1px solid #d7e1ed; border-radius: 8px; padding: 11px; font: inherit; }
 .review h3,
 .review p {
   margin: 0;
@@ -590,6 +624,7 @@ select {
   display: grid;
   gap: 10px;
 }
+.auth form label { display: grid; gap: 6px; color: var(--navy); font-size: 12px; font-weight: 700; }
 .error {
   margin: 0;
   color: #ca3d43;
@@ -601,6 +636,7 @@ select {
   gap: 16px;
   margin-bottom: 20px;
 }
+.profile > .outline { margin-left: auto; }
 .avatar {
   display: grid;
   width: 56px;
@@ -611,6 +647,22 @@ select {
   color: #fff;
   font-size: 22px;
 }
+.avatar { overflow: hidden; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.mypage-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin: 26px 0; }
+.mypage-grid section { min-height: 210px; padding: 18px; border: 1px solid var(--line); border-radius: 10px; background: #fbfcfe; }
+.mypage-grid h3 { display: flex; justify-content: space-between; margin: 0 0 15px; font-size: 15px; }
+.mypage-grid h3 small { color: var(--blue); font-size: 12px; }
+.subscription, .history { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 11px 0; border-top: 1px solid var(--line); }
+.subscription b, .subscription small, .history b, .history small { display: block; }
+.subscription b, .history b { font-size: 13px; }
+.subscription small, .history small { margin-top: 4px; color: var(--muted); font-size: 11px; }
+.subscription button { border: 0; background: none; color: #af5960; font-size: 11px; }
+.profile-data { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.profile-data span { display: grid; gap: 7px; padding: 16px; border-right: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+.profile-data span:last-child { border: 0; }
+.profile-data b { color: var(--navy); font-size: 13px; }
+.danger-link { margin-top: 22px; border: 0; background: none; color: #b25960; font-size: 12px; text-decoration: underline; }
 .modal-overlay {
   position: fixed;
   z-index: 30;
@@ -649,6 +701,9 @@ select {
   background: var(--navy);
   color: #fff;
 }
+.chat header div { display: grid; gap: 4px; }
+.chat header small { color: #a9caff; font-size: 9px; letter-spacing: .09em; }
+.chat-history { width: calc(100% - 24px); margin: 12px; padding: 7px; font-size: 11px; }
 .chat header button {
   border: 0;
   background: none;
@@ -760,6 +815,14 @@ select {
     align-items: flex-start;
     flex-direction: column;
   }
+  .product-toolbar, .market-page-head, .community-head { align-items: stretch; flex-direction: column; }
+  .product-toolbar .search { max-width: none; }
+  .product-rate { width: 100%; justify-content: space-between; }
+  .option-list { grid-template-columns: 1fr; }
+  .mypage-grid { grid-template-columns: 1fr; }
+  .profile-data { grid-template-columns: repeat(2, 1fr); }
+  .profile-data span:nth-child(2) { border-right: 0; }
+  .profile-data span:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
   .compare-grid {
     grid-template-columns: repeat(2, 1fr);
   }
